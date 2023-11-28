@@ -136,6 +136,7 @@ def bird_list():
     p={}
     p['birds']=birds
     p['birds'].sort()
+    p['quizlst']=quizlst
 
     p['page_title']='List of possible birbs'
     return render_template("bird_list.html", p=p)

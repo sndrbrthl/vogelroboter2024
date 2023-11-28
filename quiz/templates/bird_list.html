@@ -1,12 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<h2>Quiz Birds</h2>
+<p>All bird images are from wikipedia, and have been downsized. Click the links for the full image, attribution, and licensing information. See below for a list of all of the bird names used as possible answers.</p>
+<p>The quiz is in the file birds_quiz.csv. You can add birds by updating that file, and putting the image in the folder static/birds</p>
+<p>Possible answer birds are in the file birds_all.csv. You can add birds by updating that file. No images are needed.</p>
+{% for bird in p.quizlst %}
+
+    <a href="{{bird.url}}">
+    <img src="static/birds/{{bird.img}}"><br>
+    {{bird.name}}
+    Wikipedia link for {{bird.name}}</a>
+    <hr>
+{% endfor %}
+
+<h2>All Birds</h2>
 <ul>
     {% for bird in p.birds %}
         <li>{{bird}}</li>
     {% endfor %}
-
 </ul>
+
 {% endblock %}
 
 

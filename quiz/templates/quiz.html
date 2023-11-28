@@ -10,7 +10,6 @@
 
 {% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
 {% block content %}
-    < img src="/static/birds/{p.bird.img}" class="centerpad">
     <img src="/static/birds/{{ session['bird']['img']}}" class="centerpad">
     <p class="centerpad" style="font-size:24px">
         {{ session['question_number'] }}) Welcher Vogel ist das? 
@@ -21,7 +20,7 @@
         {% endfor %}
     </ul>
 
-    <!-- -->
+    <!-- 
     <hr>
     Debugging<br>
     bird: {{ session['bird']['name'] }}<br>

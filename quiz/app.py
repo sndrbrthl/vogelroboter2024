@@ -6,6 +6,16 @@ from flask import abort, redirect, url_for
 import csv
 import random
 
+from hellodrinkbot import HelloDrinkbot
+hd= HelloDrinkbot()
+
+AVENO_PUMP = 1
+LEMON_PUMP = 3
+AVENO_SIZE = 5 # ml
+LEMON_SIZE = 3 # ml
+
+# hd.dispense(pump, pumptime)
+
 app = Flask(__name__)
 app.secret_key = b'foobar'
 app.debug=True
@@ -64,6 +74,11 @@ def quiz(answer=None):
         # check session['bird']=p['bird']['name']
         if session['bird']==answer:
             p['last_correct']=f"Die letzte Antwort: Richtig! Es war ein {session['bird']} "
+            # Dispense AVENO
+            hd.dispense(AVENO_PUMP, AVENO_SIZE)
+
+            # Dispense LEMON
+            hd.dispense(LEMON_PUMP, LEMON_SIZE)
         else:
             p['last_correct']=f"Die letzte Antwort: Schade, es war ein {session['bird']}, kein {answer}"
 

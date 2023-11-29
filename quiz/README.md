@@ -2,6 +2,12 @@
 
 - 2024-11-24 A python-flask app to display the Vögelroboter quiz
 
+## To Start
+
+- click 'start_vogel.sh' on the Desktop to start the quiz server
+- <a href="http://127.0.0.1:5001">Click here to run the quiz</a>
+- <a href="http://127.0.0.1:5001">Click here to run the quiz</a>
+- [Click here to run the quiz](http://127.0.0.1:5000)
 
 ## Installation
 
@@ -26,6 +32,16 @@
 
 - Make sure the USB power has enough current. You might get by with less
   than 2.5 Amps, but it can lead to weird issues.
+
+- If one pump works, but not the other one, use the pump_test and use
+  a multimeter to measure the voltage on the pump. Put the leads of the
+  multimeter on the two connection points on the pump.
+
+  And then test the working pump. If you get voltage on one, but not the
+  other pump than consider the wiring. I am, sadly, not great with wiring, 
+  and my crimps can fail and my connectors fail, and my screw terminal 
+  joints fail. Not every time, but often enough to keep that in mind.
+
 
 ## Configuration
 
@@ -59,23 +75,22 @@
 
    - currently Chromium auto starts because of the entries in this file:
      sudo vi /etc/xdg/lxsession/LXDE-pi/autostart  
-   - Desktop/start_vogel.sh is a script on the desktop which starts 
-     in .bashrc. This is suboptimal.
 
-   - Whenever you start a terminal it will run the script. It will usually
-     fail because the address and port are already in use. Press enter
-     to get past this error screen (unless I fix it :-)
+   - BROKEN The file /etc/rc.local runs /home/pi/Desktop/start_vogel.sh on 
+     boot.  This starts the quiz program.
 
-# TODO: auto start start_vogel.sh in /etc/rc.local, or ?
- 
+   - Desktop/start_vogel.sh is a script on the desktop which you can
+     click to run to restart the quiz program if something goes wrong.
+     Select the first option 'Execute', not 'Execute in terminal'
 
-## How to run
+
+## How to run manually
 
 - The quiz is in app.py
    python -m flask run
    flask run --host=0.0.0.0 --port=5000 --reload
 
-- in browser: http://127.0.0.0:5000
+- in browser go to: http://127.0.0.0:5000
 
 ## Testing pumps
 

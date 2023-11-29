@@ -15,7 +15,12 @@ done - add 'used' list to not reuse a bird unless/until a new user. Or maybe, un
 
 done - - set/test amounts dispensed
 done - take pi and pumps out of existing robot 
-- pump 0 does not work. Pump 2 works in quiz and pump_test.py
+done - pump 0 does not work. Pump 2 works in quiz and pump_test.py
+  my daisy chained abortion of a ground wire was at fault.
+
+- Make new crimps for ground and signal wires. Don't daisy chain the 
+  grounds. Two ground wires, connected to two ground terminals on the 
+  motor hat.
 
 - test again. check pump #s in code.
 

@@ -33,8 +33,9 @@ The bird quiz robot
 
 ## About the Birds
 
-The images of birds should be downloaded and copied to static/birds. The bird 
-images are all from Wikipedia, see bird_list.csv for the name of each bird file 
+Downsized images of the birds are already loaded. The admin page has links to the wikipedia pages with attribution and licensing information. 
+
+See bird_list.csv for the name of each bird file 
 and the link to the wikipedia page for each image with the full attribution 
 and licensing details.
 

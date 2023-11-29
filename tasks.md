@@ -18,27 +18,28 @@ done - take pi and pumps out of existing robot
 done - pump 0 does not work. Pump 2 works in quiz and pump_test.py
   my daisy chained abortion of a ground wire was at fault.
 
-- Make new crimps for ground and signal wires. Don't daisy chain the 
+done - Make new crimps for ground and signal wires. Don't daisy chain the 
   grounds. Two ground wires, connected to two ground terminals on the 
-  motor hat.
+  motor hat. Tape over or rewire the ground wires.  Possibly longer 
+  wires for the pumps
 
-- test again. check pump #s in code.
+done - test again. check pump #s in code.
 
-- tape over or rewire the ground wires.
-- possibly longer wires for the pumps
-- What should it do for network? I think you need to click on the network tab and connect
-- remove my keys from .ssh
-- remove my keyboard usb dongle before shipping.
-- find clean tubing, wash it
-- add documents to the README on getting code to run,
+done - What should it do for network? I think you need to click on the network tab and connect
+
+
+done - find clean tubing, wash it
+done - add documents to the README on getting code to run,
 - done add requirements.txt
-- change the root password
+done - vogel - change the root password
 - logout from github in web
-- add fun desktop photo
+- copy pi image
+done - add fun desktop photo
 - later, remove ssh key for robot from my github
 
-- Take pictures and document the pi, hat, and motors, in case wires come loose
-- screen shot the network selection
+done - Take pictures and document the pi, hat, and motors, in case wires come loose
+
+- remove my keyboard usb dongle before shipping.
 - weigh the package
 
 - find bubble wrap, and pack in it, probably a envelope or box from Post Office

@@ -12,6 +12,21 @@
 
 - The quiz uses a Raspberry Pi and AdaFruit motor hat to dispense liquids.
 
+- You need a 5 and 12 volt power supplies.
+  - 5 volt 2.5 amp micro usb power supply for the Raspberry Pi 3b+
+  - 12 volt 1 amp or better with a barrel connector for the pumps.
+ 
+## Debugging
+
+- Make sure the green light on the top of the motor hat is on. It is 
+  near the network and USB ports. It is pretty obvious.
+
+- A red light, with intermittant green, should be lit on the opposite
+  side. On the Raspberry Pi near the Micro USB power connection.
+
+- Make sure the USB power has enough current. You might get by with less
+  than 2.5 Amps, but it can lead to weird issues.
+
 ## Configuration
 
    - the file vogelroboter/constants/vogel_constants.py controls the

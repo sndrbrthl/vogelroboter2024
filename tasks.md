@@ -15,7 +15,12 @@ done - add 'used' list to not reuse a bird unless/until a new user. Or maybe, un
 
 done - - set/test amounts dispensed
 done - take pi and pumps out of existing robot 
-- test again. change pump #s in code.
+- pump 0 does not work. Pump 2 works in quiz and pump_test.py
+
+- test again. check pump #s in code.
+
+- tape over or rewire the ground wires.
+- possibly longer wires for the pumps
 - What should it do for network? I think you need to click on the network tab and connect
 - remove my keys from .ssh
 - remove my keyboard usb dongle before shipping.
@@ -32,9 +37,9 @@ done - take pi and pumps out of existing robot
 - weigh the package
 
 - find bubble wrap, and pack in it, probably a envelope or box from Post Office
-- pi adn hat
+- pi and hat
 - 2 pumps, wired
-- 5 and 12 V power
+- 5 and 12 V power?
 - all screws/mounting hardware
 
 - confirm that Sandra can get a monitor, kb, mouse

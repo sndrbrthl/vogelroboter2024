@@ -73,11 +73,10 @@
 
 ## Autostart
 
-   - currently Chromium auto starts because of the entries in this file:
-     sudo vi /etc/xdg/lxsession/LXDE-pi/autostart  
+   - currently Chromium and start_vogel.sh auto start because of the 
+     entries in this file:
 
-   - BROKEN The file /etc/rc.local runs /home/pi/Desktop/start_vogel.sh on 
-     boot.  This starts the quiz program.
+     sudo vi /etc/xdg/lxsession/LXDE-pi/autostart  
 
    - Desktop/start_vogel.sh is a script on the desktop which you can
      click to run to restart the quiz program if something goes wrong.

@@ -2,7 +2,17 @@
 
 {% block content %}
 
+<h2>Constants</h2>
+
+<p>Constants for the number of questions, number of answers, and settings
+for the pumps are in vogel_constants.py.</p>
+
+<pre>
+{{ p.vogel_constants }}
+</pre>
+
 <h2>Quiz Birds</h2>
+
 <p>All bird images are from wikipedia, and have been downsized. Click the links for the full image, attribution, and licensing information. See below for a list of all of the bird names used as possible answers.</p>
 <p>The quiz is in the file birds_quiz.csv. You can add birds by updating that file, and putting the image in the folder static/birds</p>
 <p>Possible answer birds are in the file birds_all.csv. You can add birds by updating that file. No images are needed.</p>

@@ -13,8 +13,9 @@ done - run app
 done - add dispensing to quiz
 done - add 'used' list to not reuse a bird unless/until a new user. Or maybe, until all birds have been used.
 
-- set/test amounts dispensed
-- take pi and pumps out of existing robot, test again
+done - - set/test amounts dispensed
+done - take pi and pumps out of existing robot 
+- test again. change pump #s in code.
 - What should it do for network? I think you need to click on the network tab and connect
 - remove my keys from .ssh
 - remove my keyboard usb dongle before shipping.
@@ -23,6 +24,7 @@ done - add 'used' list to not reuse a bird unless/until a new user. Or maybe, un
 - done add requirements.txt
 - change the root password
 - logout from github in web
+- add fun desktop photo
 - later, remove ssh key for robot from my github
 
 - Take pictures and document the pi, hat, and motors, in case wires come loose

@@ -6,6 +6,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import abort, redirect, url_for
+from vogel_constants import *
 
 from hellodrinkbot import HelloDrinkbot
 # If we don't have a Motor hat set EMULATION. We can still run the quiz,
@@ -16,14 +17,6 @@ try:
     EMULATION=0
 except:
     EMULATION=1
-
-NUM_ANSWERS=3 # how many birds are shown as possible answers
-NUM_ROUNDS=4  # how many birds you are shown
-
-AVENO_PUMP = 1 # Pump number for the Aveno
-LEMON_PUMP = 3 # Pump number for the Lemon
-AVENO_SIZE = 5 # ml
-LEMON_SIZE = 3 # ml
 
 app = Flask(__name__)
 app.secret_key = b'foobar'
@@ -69,8 +62,8 @@ def check_answer(answer):
                 # don't dispense, we are in emulation mode
                 pass
             else:
-                hd.dispense(AVENO_PUMP, AVENO_SIZE) # Dispense AVENO
-                hd.dispense(LEMON_PUMP, LEMON_SIZE) # Dispense LEMON
+                hd.dispense(AVENO_PUMP, AVENO_TIME) # Dispense AVENO
+                hd.dispense(LEMON_PUMP, LEMON_TIME) # Dispense LEMON
         else:
             # sadly they were wrong.
             pass
@@ -131,15 +124,19 @@ def quiz(answer=None):
     p['page_title']='Vogel-Quiz!'
     return render_template("quiz.html", p=p)
 
-@app.route("/bird_list")
-def bird_list():
+@app.route("/admin")
+def admin():
     p={}
     p['birds']=birds
     p['birds'].sort()
     p['quizlst']=quizlst
+    with open('vogel_constants.py') as vc:
+    	lst=vc.readlines()
+
+    p['vogel_constants'] = ''.join(lst)
 
     p['page_title']='List of possible birbs'
-    return render_template("bird_list.html", p=p)
+    return render_template("admin.html", p=p)
 
 @app.route("/")
 def home():

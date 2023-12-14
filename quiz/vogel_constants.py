@@ -7,9 +7,9 @@ NUM_ROUNDS=4  # how many birds you are shown
 # I don't think these are totally stable. Adjust as needed.
 AVENO_PUMP = 0 # Pump number for the Aveno
 LEMON_PUMP = 2 # Pump number for the Lemon
-AVENO_SIZE = 5 # ml
+AVENO_SIZE = 4 # ml
 AVENO_SEC_ML = .81
 AVENO_TIME = round(AVENO_SIZE * AVENO_SEC_ML)
-LEMON_SIZE = 3 # ml
+LEMON_SIZE = 2 # ml
 LEMON_SEC_ML = .91
 LEMON_TIME = round(LEMON_SIZE * LEMON_SEC_ML)

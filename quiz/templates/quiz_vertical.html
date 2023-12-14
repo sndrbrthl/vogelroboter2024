@@ -10,17 +10,15 @@
 
 {% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
 {% block content %}
-    <div>
-        <img style="float: left; margin-right: 0.4em;" src="/static/birds/{{ session['bird']['img']}}" alt="image of test bird" >
-        <p class="fcenterpad" style="font-size:24px; text-align: center;">
-            {{ session['question_number'] }}) Welcher Vogel ist das? 
-        </p>
-        <ul class="centerpad">
-            {% for answer in p.answers %}
-                <li class="listpad"><a href="{{url_for('quiz')}}/{{answer}}">{{answer}}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
+    <img src="/static/birds/{{ session['bird']['img']}}" class="centerpad">
+    <p class="centerpad" style="font-size:24px">
+        {{ session['question_number'] }}) Welcher Vogel ist das? 
+    </p>
+    <ul class="centerpad">
+        {% for answer in p.answers %}
+            <li class="listpad"><a href="{{url_for('quiz')}}/{{answer}}">{{answer}}</a></li>
+        {% endfor %}
+    </ul>
 
     <!-- 
     <hr>

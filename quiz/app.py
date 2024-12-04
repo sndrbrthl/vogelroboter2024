@@ -135,7 +135,7 @@ def admin():
 
     p['vogel_constants'] = ''.join(lst)
 
-    p['page_title']='List of possible birbs'
+    p['page_title']='List of possible birds'
     return render_template("admin.html", p=p)
 
 @app.route("/")

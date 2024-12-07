@@ -1,0 +1,20 @@
+
+
+python -m venv .venv
+source .venv/Scripts/activate
+pip3 install --upgrade pip
+pip3 install --upgrade wheel
+pip3 install -r requirements.txt
+python -m flask run --host=0.0.0.0 --port=5000 --reload
+http://127.0.0.1:5000
+
+
+ffmpeg -i ALTESFILE -c:a
+
+opus!
+
+
+ffmpeg -i ALTESFILE -acodec copy -f webm NEUESFILE.webm
+
+
+find . -type f -iname '*.mp3' -exec ffmpeg -i {} -map 0:a -c:a libvorbis {}.webm

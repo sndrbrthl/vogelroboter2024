@@ -124,6 +124,14 @@ def quiz(answer=None):
     p['page_title']='Vogel-Quiz!'
     return render_template("quiz.html", p=p)
 
+@app.route("/")
+def home():
+    p={}
+    p['page_title']='Home page!'
+    return render_template("home.html", p=p)
+    # path to quiz
+    # path to admin
+
 @app.route("/admin")
 def admin():
     p={}
@@ -138,11 +146,21 @@ def admin():
     p['page_title']='List of possible birds'
     return render_template("admin.html", p=p)
 
-@app.route("/")
-def home():
-    p={}
-    p['page_title']='Home page!'
-    return render_template("home.html", p=p)
+# quiz: welcome
+
+# quiz: prepare
+
+# quiz: modus
+
+# (quiz: difficulty)
+
+# quiz: question
+
+# quiz: evaluate
+
+# quiz: results
+
+
 
 birds=read_birds()
 quizlst=read_quiz()

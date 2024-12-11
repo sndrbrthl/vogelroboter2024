@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+<!-- hide header and nav so the quiz is cleaner -->
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
+
+
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+<div class="main-content">
+    <p class="center">First, put a Stamperl down there between my feet. Done, that?
+    <div class="question-flex">
+        <div class="question-flex-item actual-question">
+        </div>
+        </p>
+    </div>
+    <a href="{{ url_for('quiz_mode') }}"><button type="button" class="button-19">Perfect than let’s start.</button></a>
+</div>
+{% endblock %}
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}

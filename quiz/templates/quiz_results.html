@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
 <!-- hide header and nav so the quiz is cleaner --> 
-
-{% block content %}
-    <ul class="centerpad" >
-        {% for answer in p['results'] %}
-            <li><img src="/static/birds/{{answer.img}}" ><br>
-            <!-- <li><img src="/static/birds/{{answer.img}}" class="centerpad"> -->
-                    {% if answer.bird_name == answer.answer %}
-                        Richtig! Es ist ein {{answer.bird_name}}
-                    {% else %}
-                        Schade! Es ist ein {{answer.bird_name}} und deine Antwort war {{answer.answer}}
-                    {% endif %}
-                </li>
-                <hr>
-        {% endfor %}
-        <a href="/quiz"><button type="button" class="button-19"> Spiel nochmal?</button> </a>
-    </ul>
+{% block header %}
+<h1 class="center">
+    <a href="/">Vögelroboter
+        {% block title %} {{ p.page_title }} {% endblock %}
+    </a>
+</h1>
 {% endblock %}
 
-
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+    <div class="centerpad" >
+        {% for question in p.questions %}
+            <img class="centerpad" style="width: 20rem" src="/static/birds/{{ question.options[question.solution] }}/{{ p.quiz_content.birds[question.options[question.solution]].img }}" >
+                    {% if question.solution == question.answer %}
+                        <p class="center">Richtig! Es ist ein {{ question.options[question.solution] }}</p>
+                    {% else %}
+                        <p class="center">Schade! Es ist ein {{ question.options[question.solution] }} und deine Antwort war {{ question.options[question.answer] }}</p>
+                    {% endif %}
+                <hr>
+        {% endfor %}
+        <a href="{{ url_for('quiz_welcome') }}?clear=1"><button type="button" class="button-19"> Spiel nochmal?</button> </a>
+    </div>
+{% endblock %}
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}

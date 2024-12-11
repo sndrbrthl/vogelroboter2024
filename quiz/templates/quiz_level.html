@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+<!-- hide header and nav so the quiz is cleaner -->
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
+
+
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+<!-- <div class="main-content">
+<form method="get" action="/quiz/1">
+    {% if p.mode == 'img' %}
+    <input type="radio" id="Beginner" name="level" value="Beginner" checked class="hidden" /><label for="Beginner" class="button-19">Beginner</label>
+    <input type="radio" id="Intermediate" name="level" value="Intermediate" class="hidden" /><label
+        for="Intermediate" class="button-19">Intermediate</label>
+    <input type="radio" id="Expert" name="level" value="Expert" class="hidden" /><label for="Expert" class="button-19">Expert</label>
+    {% endif %}
+    <button type="submit" class="button-19 button-green"> Bereit? Auf los gehts los!</button>
+</form>
+</div> -->
+<div class="main-content">
+    <p class="centerpad" style="font-size:24px; text-align: center;">
+        How good are you with Vögel?
+    </p>
+    <form method="get" action="/quiz/1">
+    <div class="question-flex">
+        <div class="question-flex-item actual-question">
+            {% if p.mode == 'img' %}
+            <input type="radio" id="Beginner" name="level" value="Beginner" checked class="hidden" /><label for="Beginner"
+                class="button-19">Beginner</label>
+            <input type="radio" id="Intermediate" name="level" value="Intermediate" class="hidden" /><label for="Intermediate"
+                class="button-19">Intermediate</label>
+            <input type="radio" id="Expert" name="level" value="Expert" class="hidden" /><label for="Expert"
+                class="button-19">Expert</label>
+            {% endif %}
+        </div>
+        <div class="question-flex-item">
+            <button type="submit" class="button-19 button-green"> Bereit? Auf los gehts los!</button>
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}

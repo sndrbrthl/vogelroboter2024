@@ -13,3 +13,10 @@ AVENO_TIME = round(AVENO_SIZE * AVENO_SEC_ML)
 LEMON_SIZE = 1.2  # ml
 LEMON_SEC_ML = 0.91
 LEMON_TIME = round(LEMON_SIZE * LEMON_SEC_ML)
+
+BIRDS_DIR = "static/birds"
+DIFFICULTIES = [
+    "Beginner",
+    "Intermediate",
+    "Expert",
+]

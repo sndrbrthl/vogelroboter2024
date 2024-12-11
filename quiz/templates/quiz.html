@@ -1,35 +1,33 @@
 {% extends 'base.html' %}
 <!-- hide header and nav so the quiz is cleaner --> 
-{% block header %}
-    <h1 class="center">
-        <a href="/">Vögelroboter
-        {% block title %} {{ p.page_title }} {% endblock %}
-        </a>
-    </h1>
-{% endblock %}
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
 
 {% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
 {% block content %}
-    <div>
-        <img style="float: left; margin-right: 0.4em;" src="/static/birds/{{ session['bird']['img']}}" alt="image of test bird" >
-        <p class="fcenterpad" style="font-size:24px; text-align: center;">
-            {{ session['question_number'] }}) Welcher Vogel ist das? 
+    <div class="main-content">
+        {% set question = p.questions[p.question_num - 1] %}
+        {% set solution_bird = question.options[question.solution] %}
+        <p class="centerpad" style="font-size:24px; text-align: center;">
+            {{ p.question_num }}) Welcher Vogel ist das? 
         </p>
-        <ul class="centerpad">
-            {% for answer in p.answers %}
-                <li class="listpad"><a href="{{url_for('quiz')}}/{{answer}}">{{answer}}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="question-flex">
+            <div class="question-flex-item actual-question">
+                {% if p.mode == "audio" %}
+                <div>
+                    <img style="float: left; margin-right: 0.4em;" src="/static/birds/{{ solution_bird }}/{{ p.quiz_content.birds[solution_bird].son }}" alt="Sonogram of the call of the bird" >
+                    <audio controls loading="lazy" src="/static/birds/{{ solution_bird }}/{{ p.quiz_content.birds[solution_bird].ruf }}"></audio><br>
+                </div>
+                {% else %}
+                <img style="float: left; margin-right: 0.4em;" src="/static/birds/{{ solution_bird }}/{{ p.quiz_content.birds[solution_bird].img }}" alt="image of a bird" >
+                {% endif %}
+            </div>
+            <ul class="question-flex-item">
+                {% for option in question.options %}
+                    <li class="listpad"><a href="{{url_for('quiz')}}/{{ p.question_num + 1 }}?aq={{ p.question_num }}&a={{ loop.index }}"><button type="button" class="button-19">{{ option }}</button></a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-
-    <!-- 
-    <hr>
-    Debugging<br>
-    bird: {{ session['bird']['name'] }}<br>
-    bird img: {{ session['bird']['img'] }}<br>
-    last correct? {{p.last_correct}}<br>
-    used list?  {{session['used']}}<br>
-    -->
 {% endblock %}
-
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}
 

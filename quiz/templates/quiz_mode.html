@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+<!-- hide header and nav so the quiz is cleaner -->
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
+
+
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+<div class="main-content">
+    <p class="centerpad" style="font-size:24px; text-align: center;">
+        Which modus do you want to play?
+    </p>
+    <div class="question-flex">
+        <div class="question-flex-item">
+            <a href="{{ url_for('quiz_level') }}?mode=img" class="vertical-flex">
+                <img src="/static/birds/Pirol/img_Pirol.webp" alt="A visual image of a bird" style="width: 20rem" class="center question-flex-item-vertical">
+                <button type="button" class="button-19 question-flex-item-vertical">Picture Mode</button>
+            </a>
+        </div>
+        <div class="question-flex-item">
+            <a href="{{ url_for('quiz_level') }}?mode=audio" class="vertical-flex">
+                <img src="/static/birds/Pirol/son_Pirol.webp" alt="A sonogram image of a bird" style="width: 20rem" class="center question-flex-item-vertical">
+                <button type="button" class="button-19 question-flex-item-vertical">Audio Mode</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}

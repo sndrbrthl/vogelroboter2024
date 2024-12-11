@@ -10,24 +10,15 @@
 
 {% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
 {% block content %}
-    <img src="/static/birds/{{ session['bird']['img']}}" class="centerpad">
+    <img src="/static/birds/{{ p.questions.options[p.questions[p.question_num - 1].solution] }}/{{ p.quiz_content.birds[p.questions[p.question_num - 1].options[p.questions[p.question_num - 1].solution]].img }}" class="centerpad">
     <p class="centerpad" style="font-size:24px">
-        {{ session['question_number'] }}) Welcher Vogel ist das? 
+        {{ p.question_num }}) Welcher Vogel ist das? 
     </p>
     <ul class="centerpad">
-        {% for answer in p.answers %}
-            <li class="listpad"><a href="{{url_for('quiz')}}/{{answer}}">{{answer}}</a></li>
+        {% for option in p.questions[p.question_num - 1].options %}
+            <li class="listpad"><a href="{{url_for('quiz')}}/{{ p.question_num + 1 }}?aq={{ p.question_num }}&a={{ loop.index }}">{{ option }}</a></li>
         {% endfor %}
     </ul>
-
-    <!-- 
-    <hr>
-    Debugging<br>
-    bird: {{ session['bird']['name'] }}<br>
-    bird img: {{ session['bird']['img'] }}<br>
-    last correct? {{p.last_correct}}<br>
-    used list?  {{session['used']}}<br>
-    -->
 {% endblock %}
 
 

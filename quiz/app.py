@@ -1,166 +1,269 @@
-
-import csv
 import random
 from flask import Flask
 from flask import render_template
-from flask import request
 from flask import session
-from flask import abort, redirect, url_for
-from vogel_constants import *
+from flask import request
+from flask import flash
+from flask import redirect
+from flask import url_for
+import os
+import vogel_constants as config
 
 from hellodrinkbot import HelloDrinkbot
+
 # If we don't have a Motor hat set EMULATION. We can still run the quiz,
 # we just won't get a cocktail
-birds=[]
 try:
-    hd= HelloDrinkbot()
-    EMULATION=0
-except:
-    EMULATION=1
+    hd = HelloDrinkbot()
+    EMULATION = 0
+except Exception:
+    EMULATION = 1
 
 app = Flask(__name__)
-app.secret_key = b'foobar'
-app.debug=True
+app.secret_key = b"foobar"
 
-def read_birds():
-    """ reads the list of possible bird answers """
-    with open('birds_all.csv',newline='', encoding="UTF8") as lst:
-        return [b.strip() for b in lst.readlines()]
 
-def read_quiz():
-    """ Read the list of possible questions, with the names and pictures """
-    quizlst=[]
-    with open('birds_quiz.csv',newline='', encoding="UTF8") as quizfile:
-        reader=csv.reader(quizfile)
-        for row in reader:
-            quizlst.append({'num':row[0],'name':row[1],'url':row[2],'img':row[3]})
-    return quizlst
+def load_quiz_content():
+    """This generates a data structure which represents the quiz options"""
 
-def pick_question_bird():
-    """ Which bird are we going to show next? """
-    while True:
-        bird_num = random.randint(0, len(quizlst)-1)
-        if bird_num not in session['used']:
-            session['used'].append(bird_num)
-            return quizlst[bird_num]
+    os_walker = os.walk(config.BIRDS_DIR)
+    birds_root_dir, birds_dirs, other_files = next(os_walker)
 
-@app.route("/quiz_results")
-def quiz_results():
-    """ return the results """
-    p={}
-    p['results']=session['results']
-    session['results']=[]
-    p['page_title']='Vogel-Quiz Antworten!'
-    return render_template("quiz_results.html", p=p)
+    quiz_content = {
+        "img": {difficulty_name: [] for difficulty_name in config.DIFFICULTIES},
+        "audio": [],
+        "birds": {bird_name: {} for bird_name in sorted(birds_dirs)},
+    }
 
-def check_answer(answer):
-    """ check their answer and dispense (or not) the cocktail """
+    for bird_name in birds_dirs:
+        bird_path = os.path.join(birds_root_dir, bird_name)
+        bird_files = os.scandir(bird_path)
+        for bird_file in bird_files:
+            if bird_file.name in config.DIFFICULTIES:
+                if bird_name not in quiz_content["img"][bird_file.name]:
+                    quiz_content["img"][bird_file.name].append(bird_name)
 
-    if 'bird_name' in session:
-        if session['bird_name']==answer:
-            if EMULATION:
-                # don't dispense, we are in emulation mode
-                pass
+            elif bird_file.name.startswith("img_") and bird_file.name.endswith(".webp"):
+                if "img" not in quiz_content["birds"][bird_name]:
+                    quiz_content["birds"][bird_name]["img"] = bird_file.name
+
+            elif bird_file.name.startswith("ruf_") and bird_file.name.endswith(".webm"):
+                if bird_name not in quiz_content["audio"]:
+                    quiz_content["audio"].append(bird_name)
+                if "ruf" not in quiz_content["birds"][bird_name]:
+                    quiz_content["birds"][bird_name]["ruf"] = bird_file.name
+
+            elif bird_file.name.startswith("son_") and bird_file.name.endswith(".webp"):
+                if bird_name not in quiz_content["audio"]:
+                    quiz_content["audio"].append(bird_name)
+                if "son" not in quiz_content["birds"][bird_name]:
+                    quiz_content["birds"][bird_name]["son"] = bird_file.name
+
+    return quiz_content
+
+
+def generate_quiz_questions(
+    mode, level="beginner", num_rounds=config.NUM_ROUNDS, num_answers=config.NUM_ANSWERS
+):
+    questions = []
+    available_answer_birds = quiz_content[mode]
+    if mode == "img":
+        available_answer_birds = available_answer_birds[level]
+    available_answer_birds = set(available_answer_birds)
+    for question in range(num_rounds):
+        correct_answer = random.choice(list(available_answer_birds))
+        available_answer_birds.discard(correct_answer)
+        answer_options = random.sample(
+            list(set(quiz_content["birds"]) - set([correct_answer])), config.NUM_ANSWERS - 1
+        ) + [correct_answer]
+        random.shuffle(answer_options)
+        questions.append(
+            {
+                "solution": answer_options.index(correct_answer),
+                "options": answer_options,
+            }
+        )
+    return questions
+
+
+def check_answer(answered_question_index, answer_index, questions):
+    """check their answer and dispense (or not) the cocktail"""
+
+    if answered_question_index < config.NUM_ROUNDS:  # is the question number valid
+        if answer_index <= config.NUM_ANSWERS:  # is the answer number valid
+            if "answer" in questions[answered_question_index]:
+                flash("You already answered the last question")
             else:
-                hd.dispense(AVENO_PUMP, AVENO_TIME) # Dispense AVENO
-                hd.dispense(LEMON_PUMP, LEMON_TIME) # Dispense LEMON
+                if questions[answered_question_index]["solution"] == answer_index:
+                    if EMULATION:
+                        # don't dispense, we are in emulation mode
+                        pass
+                    else:
+                        hd.dispense(config.AVENO_PUMP, config.AVENO_TIME)  # Dispense AVENO
+                        hd.dispense(config.LEMON_PUMP, config.LEMON_TIME)  # Dispense LEMON
+                else:
+                    # sadly they were wrong.
+                    pass
+
+                # keep track of the results of each question, to display at the end
+                if "answer" not in questions[answered_question_index]:
+                    questions[answered_question_index]["answer"] = answer_index
         else:
-            # sadly they were wrong.
-            pass
-
-        # keep track of the results of each question, to display at the end
-        try:
-            rslt={'bird_name':session['bird_name'], 'img':session['img'], 'answer':answer}
-        except:
-            rslt={'bird_name':'broken', 'img':'broken', 'answer':'broken'}
-        session['results'].append(rslt)
+            flash(
+                "The chosen answer number does not exist. \
+                    Are you sure you are using the quiz correctly? ;)"
+            )
     else:
-        # this is the first question, and there should not be results yet.
-        session['results']=[]
+        flash(
+            "The answered question number does not exist. \
+                Are you sure you are using the quiz correctly? ;)"
+        )
+    return questions
 
-@app.route("/quiz/<answer>")
-@app.route("/quiz")
-def quiz(answer=None):
-    """ show the quiz, and results, and dispense the cocktail. This code
-        suffers from a lack of elegance, but it partially makes up for that
-        by appearing to work.
-        It uses 'bird' as both a name, and a dict. That is lame"""
-    p={}
-
-    if 'question_number' in session:
-        session['question_number'] += 1
-    else:
-        session['question_number']=1
-        session['correct_count]'] = 0
-        session['results]'] = {}
-
-    if 'used' not in session:
-        session['used']=[]
-
-    check_answer(answer) # checks answer, dispenses drink
-    # Is their round over? clear the session and return results.
-    if session['question_number'] > NUM_ROUNDS:
-        p['results']=session['results']
-        p['page_title']='Vogel-Quiz Antworten!'
-        session.clear()
-        return render_template("quiz_results.html", p=p)
-
-    p['birds']=birds
-    p['quizlst']=quizlst
-    session['bird']=pick_question_bird()
-    session['bird_name']=session['bird']['name']
-    session['img']=session['bird']['img']
-    p['qcnt']=1
-    p['q']=session['bird']['num']
-    p['answers']=[]
-    p['answers'].append(session['bird']['name'])
-    while len(p['answers'])<NUM_ANSWERS:
-        a_num = random.randint(0, len(birds)-1)
-        answer_name = birds[a_num]
-        if answer_name not in p['answers'] and answer_name != session['bird']['name']:
-            p['answers'].append(p['birds'][a_num])
-    random.shuffle(p['answers'])
-
-    p['page_title']='Vogel-Quiz!'
-    return render_template("quiz.html", p=p)
 
 @app.route("/")
 def home():
-    p={}
-    p['page_title']='Home page!'
+    p = {}
+    p["page_title"] = "Home page!"
     return render_template("home.html", p=p)
-    # path to quiz
-    # path to admin
+
 
 @app.route("/admin")
 def admin():
-    p={}
-    p['birds']=birds
-    p['birds'].sort()
-    p['quizlst']=quizlst
-    with open('vogel_constants.py') as vc:
-    	lst=vc.readlines()
+    p = {}
+    with open("vogel_constants.py") as vc:
+        lst = vc.readlines()
 
-    p['vogel_constants'] = ''.join(lst)
+    p["vogel_constants"] = "".join(lst)
+    p["quiz_content"] = quiz_content
 
-    p['page_title']='List of possible birds'
+    p["page_title"] = "List of possible birds"
     return render_template("admin.html", p=p)
 
+
 # quiz: welcome
+@app.route("/quiz/welcome")
+def quiz_welcome():
+    """Initial welcome screen of the quiz. This should be open by default when in public."""
+    p = {}
+    if int(request.args.get("clear", 0)) == 1:
+        session.clear()
+    p["page_title"] = "Welcome to the birds quiz!"
+    return render_template("quiz_welcome.html", p=p)
+
 
 # quiz: prepare
+@app.route("/quiz/prepare")
+def quiz_prepare():
+    """This asks the user to clean up and put a cup underneath the penguin."""
+    p = {}
+    p["page_title"] = "First things first"
+    return render_template("quiz_prepare.html", p=p)
+
 
 # quiz: modus
+@app.route("/quiz/mode")
+def quiz_mode():
+    """This asks the user to select the mode of the quiz."""
+    p = {}
+    p["page_title"] = "Seeing or hearing?"
+    return render_template("quiz_mode.html", p=p)
+
 
 # (quiz: difficulty)
+@app.route("/quiz/level")
+def quiz_level():
+    p = {}
+
+    if "mode" not in session:
+        session["mode"] = request.args.get("mode", False)
+    if session["mode"] not in ("img", "audio"):
+        flash(
+            "The provided quiz mode does not exist. \
+              Are you sure you are using the quiz correctly? ;)"
+        )
+        redirect(url_for("quiz_mode"))
+
+    p["mode"] = session["mode"]
+    if session["mode"] == "img":
+        p["page_title"] = "Please select your desired difficulty"
+    elif session["mode"] == "audio":
+        p["page_title"] = "Are you ready?"
+    return render_template("quiz_level.html", p=p)
+
 
 # quiz: question
+@app.route("/quiz/<int:question_num>")
+@app.route("/quiz")
+def quiz(question_num=None):
+    """
+    show the quiz, and results, and dispense the cocktail. This code
+    suffers from a lack of elegance, but it partially makes up for that
+    by appearing to work.
+    """
+    p = {}
 
-# quiz: evaluate
+    # PREPARING
+    if session["mode"] == "img":
+        if "level" not in session:
+            session["level"] = request.args.get("level", False)
+        if session["level"] not in config.DIFFICULTIES:
+            flash(
+                "The provided difficulty level does not exist. \
+                Are you sure you are using the quiz correctly? ;)"
+            )
+            redirect(url_for("quiz_level"))
+
+    if "questions" not in session:
+        session["questions"] = generate_quiz_questions(
+            mode=session["mode"],
+            level=session.get("level", "Beginner"),
+            num_rounds=config.NUM_ROUNDS,
+            num_answers=config.NUM_ANSWERS,
+        )
+
+    # GETTING USER ANSWER
+    if question_num > 1:
+        answered_question = int(request.args.get("aq", 0))
+        answer = int(request.args.get("a", 0))
+
+        # CHECKING USER ANSWER
+        session["questions"] = check_answer(
+            answered_question - 1, answer - 1, session["questions"]
+        )  # checks and stores answer, dispenses drink
+
+    # RENDERING RESULTS
+    # Is their round over? clear the session and return results.
+    if question_num > config.NUM_ROUNDS:
+        return render_template("quiz_donate.html", p=p)
+
+    # RENDERING QUESTION PAGE
+    p["question_num"] = question_num
+    p["questions"] = session["questions"]
+    p["mode"] = session["mode"]
+    p["quiz_content"] = quiz_content
+    p["page_title"] = "Vogel-Quiz!"
+    return render_template("quiz.html", p=p)
+
+
+# quiz: donate
+@app.route("/quiz/donate")
+def quiz_donate():
+    """Displays a donation page."""
+    p = {}
+    p["page_title"] = "Please feed the bird!"
+    return render_template("quiz_donate.html", p=p)
+
 
 # quiz: results
+@app.route("/quiz/results")
+def quiz_results():
+    """return the results"""
+    p = {}
+    p["quiz_content"] = quiz_content
+    p["questions"] = session["questions"]
+    p["page_title"] = "Vogel-Quiz Antworten!"
+    return render_template("quiz_results.html", p=p)
 
 
-
-birds=read_birds()
-quizlst=read_quiz()
+quiz_content = load_quiz_content()

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+<!-- hide header and nav so the quiz is cleaner -->
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
+
+
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+<div class="main-content">
+    <p class="center">Enjoy your Averna! <br/> If you like it, please show some love and put a little gift in the donation box.</p>
+    <a href="{{ url_for('quiz_results') }}"><button type="button" class="button-19">Alright, here is my money, how did I do?</button></a>
+</div>
+{% endblock %}
+{% block footer %}<!-- keeps footer from main template from showing -->{% endblock %}

@@ -11,11 +11,29 @@
 
 ## Installation
 
-- check out of github
-- install requirements
+### Software
+1. check out of github
+a. Copy the SSH URL/String from the green "Code" button on top on the start page of the repository.
 
-    pip install -r requirements.txt
+b. Open a terminal on your computer in the directory where you want to place the repo.
+* On Linux/Mac OS: Open your Terminal app and navigate to the directory using `cd`.
+* On windows: right-click inside the directory on a blank area and select "Open Git Bash here".
 
+c. Type this command and replace `REPO` with the URL you copied in step `a`.
+`git clone REPO`
+
+2. Install python dependencies
+a. In this terminal navigate into the downloaded repository into the quiz directory:
+`cd vogelroboter/quiz`
+b. Now run the setup script here:
+`source install_python_dependencies.sh`
+c. Now you have all required python modules (libraries) installed in a virtual environment inside this directory.
+
+3. Now you can start the server:
+* In development mode: `./run_server_dev.sh`
+* In production mode: `./run_server_prod.sh`
+
+### Hardware
 - The quiz uses a Raspberry Pi and AdaFruit motor hat to dispense liquids.
 
 - You need a 5 and 12 volt power supplies.

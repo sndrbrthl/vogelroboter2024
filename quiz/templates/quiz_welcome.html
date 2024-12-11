@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+<!-- hide header and nav so the quiz is cleaner -->
+{% block header %}<!-- keeps title from main template from showing -->{% endblock %}
+
+{% block nav %}<!-- keeps nav from main template from showing --> {% endblock %}
+{% block content %}
+<div class="main-content">
+    <div class="question-flex">
+        <div class="question-flex-item actual-question">
+            <img src="/static/pingu_at_congress.jpg" alt="Pingu at Congress 37C3" style="width: 20rem" class="center">
+        </div>
+        <p class="center">Welcome! I’m Pingu, your Vögelrobot. I’ll serve you Averna Sour...if you’re good with Vögel.</p>
+    </div>
+    <a href="{{ url_for('quiz_prepare') }}"><button type="button" class="button-19">Ready to go. Lets play.</button></a>
+</div>
+{% endblock %}
